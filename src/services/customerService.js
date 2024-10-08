@@ -36,11 +36,18 @@ export const callCreateCustomer = async (id, values) => {
             body: JSON.stringify(values)
         });
         const data = await response.json();
-        return data;
+        if (!response.ok) {
+            data.error = true;
+            return data;
+        } else {
+            return data;
+        }
     } catch (error) {
-        console.log("Error occurred: ", error);
+        console.error("Error occurred:", error);
+        message.error(error.message);
     }
-}
+};
+
 
 export const deleteCustomerById = async (id) => {
 

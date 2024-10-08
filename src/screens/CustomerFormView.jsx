@@ -23,14 +23,12 @@ const CustomerFormView = () => {
     }, [id, form]);
 
     const onFinish = async (values) => {
-        values.creation_date = new Date().toISOString();;
-
         setLoading(true);
         setMessage("Please wait..!");
         setOpen(true);
         const result = await callCreateCustomer(id, values);
 
-        if (result.status !== 500) {
+        if (!result?.error) {
             form.setFieldsValue({
                 name: '',
                 contact: '',

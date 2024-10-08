@@ -21,7 +21,7 @@ const CustomerView = () => {
         }
     }, [id]);
 
-    const customerProjects = customer.projects?.length > 0 && customer.projects.map((project)=>{return <Text>{project.name},</Text>});
+    const customerProjects = customer?.projects?.length > 0 && customer?.projects?.map((project)=>{return <Text>{project?.name},</Text>});
 
     return (
         <div style={{ maxWidth: 600, margin: 'auto', padding: '20px' }}>
