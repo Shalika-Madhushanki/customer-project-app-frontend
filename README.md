@@ -32,17 +32,21 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 To build and run your application with Docker:
 
-1. In the project root directory, run:
+1. In the project root directory, In the project root directory, install the project’s dependencies using npm:
+   ```bash
+   npm install
+   ```
+2. Build the application to create optimized production-ready files. run:
    ```bash
    npm run build
    ```
 
-1. In the project root directory, run:
+3. Build and Start the Docker Containers, run:
    ```bash
    docker compose up --build
    ```
 
-2. Once the build is complete, the application will be available at [http://localhost:3000](http://localhost:3000).
+4. Once the build is complete, the application will be available at [http://localhost:3000](http://localhost:3000).
 
 ### Navigating the Application
 
