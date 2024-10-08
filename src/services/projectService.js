@@ -34,7 +34,12 @@ export const callCreateProject = async (id, values) => {
             body: JSON.stringify(values)
         });
         const data = await response.json();
-        return data;
+        if (!response.ok) {
+            data.error = true;
+            return data;
+        } else {
+            return data;
+        }
     } catch (error) {
         console.log("Error occurred: ", error);
     }
@@ -58,21 +63,7 @@ export const deleteProjectById = async (id) => {
         message.error("Error occurred.!");
     }
 }
-export const deleteCustomerById = async (id) => {
 
-    try {
-        await fetch(`${ENDPOINT}/${id}`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        message.success("Record deleted successfully.!");
-    } catch (error) {
-        console.log("Error occurred: ", error);
-        message.error("Error occurred.!");
-    }
-}
 export const downloadProjectByDataRange = async (startDate, endDate) => {
     try {
         const response = await fetch(`${ENDPOINT}/download`, {

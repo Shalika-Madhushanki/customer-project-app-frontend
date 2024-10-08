@@ -37,13 +37,11 @@ const ProjectFormView = () => {
     }, []);
 
     const onFinish = async (values) => {
-        values.creationDate = new Date().toISOString();;
-
         setLoading(true);
         setMessage("Please wait..!");
         setOpen(true);
         const result = await callCreateProject(id, values);
-        if (result?.status !== 500) {
+        if (!result?.error) {
             form.setFieldsValue({
                 name: '',
                 description: '',
