@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Space, Typography } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { fectchProjectDataById } from './ProjectApiCalls';
+import { fectchProjectDataById } from '../services/projectService';
 
 const { Title, Text } = Typography;
 
@@ -44,10 +44,10 @@ const ProjectView = () => {
                         <Text>{project?.customer?.name}</Text>
                     </div>
                     <Space>
-                        <Button type="primary" onClick={() => navigate(`/Project/edit/${id}`)}>
+                        <Button type="primary" onClick={() => navigate(`/projects/edit/${id}`)}>
                             Edit
                         </Button>
-                        <Button onClick={() => navigate('/Project')}>Back to List</Button>
+                        <Button onClick={() => navigate('/projects')}>Back to List</Button>
                     </Space>
                 </Space>
             </Card>

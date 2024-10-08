@@ -1,9 +1,8 @@
 import React from 'react';
-import { useRouteError } from "react-router-dom";
+import { useRouteError } from 'react-router-dom';
 
-const ErrorScreen = () => {
+const ErrorView = () => {
   const error = useRouteError();
-  console.error(error);
 
   return (
     <div>
@@ -16,4 +15,4 @@ const ErrorScreen = () => {
   );
 }
 
-export default ErrorScreen;
+export default ErrorView;

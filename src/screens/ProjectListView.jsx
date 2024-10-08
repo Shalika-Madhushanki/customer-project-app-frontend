@@ -3,11 +3,11 @@ import { Button, Col, Divider, Popconfirm, Row, Space, Table } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, DownloadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
-import { fetchProjectList } from './ProjectApiCalls';
-import { deleteProjectById } from './ProjectApiCalls';
+import { fetchProjectList } from '../services/projectService';
+import { deleteProjectById } from '../services/projectService';
 
 
-const ProjectList = () => {
+const ProjectListView = () => {
     const [projectList, setProjectList] = useState([]);
     const navigate = useNavigate();
     useEffect(
@@ -19,8 +19,11 @@ const ProjectList = () => {
             callFetchProjectData();
         }, []
     );
-    const handleDelete = (id) => {
-        deleteProjectById(id);
+    const handleDelete = async (id) => {
+        const res = await deleteProjectById(id);
+        if (res) {
+            setProjectList(projectList.filter(customer => customer.id !== id));
+        }
     }
 
     const columns = [
@@ -49,8 +52,8 @@ const ProjectList = () => {
             key: 'actions',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button icon={<EyeOutlined />} onClick={() => navigate(`/Project/view/${record.id}`)}>View</Button>
-                    <Button icon={<EditOutlined />} onClick={() => navigate(`/Project/edit/${record.id}`)}>Edit</Button>
+                    <Button icon={<EyeOutlined />} onClick={() => navigate(`/projects/view/${record.id}`)}>View</Button>
+                    <Button icon={<EditOutlined />} onClick={() => navigate(`/projects/edit/${record.id}`)}>Edit</Button>
                     <Popconfirm title="Are you sure?" onConfirm={() => handleDelete(record.id)}>
                         <Button icon={<DeleteOutlined />} danger>Delete</Button>
                     </Popconfirm>
@@ -62,8 +65,8 @@ const ProjectList = () => {
     return (
         <div>
             <Row>
-                <Col><Button icon={<PlusOutlined />} onClick={() => navigate(`/Project/add`)}>Create New Project</Button></Col>
-                <Col><Button icon={<DownloadOutlined />} onClick={() => navigate(`/Project/download`)}>DownLoad Projects</Button></Col>
+                <Col><Button icon={<PlusOutlined />} onClick={() => navigate(`/projects/add`)}>Create New Project</Button></Col>
+                <Col><Button icon={<DownloadOutlined />} onClick={() => navigate(`/projects/download`)}>DownLoad Projects</Button></Col>
             </Row>
 
             <Divider />
@@ -73,4 +76,4 @@ const ProjectList = () => {
     );
 }
 
-export default ProjectList;
+export default ProjectListView;

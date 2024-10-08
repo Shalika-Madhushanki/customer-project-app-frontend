@@ -3,12 +3,12 @@ import { Button, Form, Input, Modal, Select } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 
-import { fectchProjectDataById, callCreateProject } from './ProjectApiCalls';
-import { fetchCustomerList } from './CustomerApiCalls';
+import { fectchProjectDataById, callCreateProject } from '../services/projectService';
+import { fetchCustomerList } from '../services/customerService';
 
 const { Option } = Select;
 
-const ProjectForm = () => {
+const ProjectFormView = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -16,12 +16,12 @@ const ProjectForm = () => {
     const [customerList, setCustomerList] = useState();
     const navigate = useNavigate();
     const { id } = useParams();
+
     useEffect(() => {
         if (id) {
-            console.log("calling fetch project: ");
             const callFetchProjectDataById = async (cust_id) => {
                 const projectData = await fectchProjectDataById(cust_id);
-                console.log("project:", projectData);
+                projectData.customerId = projectData.customer.id;
                 form.setFieldsValue(projectData);
             }
             callFetchProjectDataById(id);
@@ -37,23 +37,22 @@ const ProjectForm = () => {
     }, []);
 
     const onFinish = async (values) => {
-        values.creation_date = new Date().toISOString();;
-        values.cust_id = values.customerId;
+        values.creationDate = new Date().toISOString();;
+
         setLoading(true);
         setMessage("Please wait..!");
         setOpen(true);
-        console.log("form values: ", values);
         const result = await callCreateProject(id, values);
-        if (result) {
-            setTimeout(() => {
-
-            }, 2000);
+        if (result?.status !== 500) {
             form.setFieldsValue({
                 name: '',
                 description: '',
             });
             setLoading(false);
             setMessage("Operation successful..!");
+        } else {
+            setLoading(false);
+            setMessage("Error occurred..!");
         }
     }
 
@@ -89,7 +88,7 @@ const ProjectForm = () => {
                     <Button type="primary" htmlType="submit">
                         {id ? 'Update' : 'Create'}
                     </Button>
-                    <Button type="link" onClick={() => navigate('/Project')} style={{ marginLeft: '8px' }}>
+                    <Button type="link" onClick={() => navigate('/projects')} style={{ marginLeft: '8px' }}>
                         Cancel
                     </Button>
                 </Form.Item>
@@ -97,7 +96,7 @@ const ProjectForm = () => {
             <Modal
                 title={<p>Loading</p>}
                 footer={
-                    <Button type="primary" onClick={() => { navigate("/Project") }}>
+                    <Button type="primary" onClick={() => { navigate("/projects") }}>
                         Close
                     </Button>
                 }
@@ -111,4 +110,4 @@ const ProjectForm = () => {
     );
 }
 
-export default ProjectForm;
+export default ProjectFormView;

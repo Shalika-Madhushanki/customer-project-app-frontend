@@ -3,11 +3,12 @@ import { Button, Divider, Popconfirm, Space, Table } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
-import { fetchCustomerList, deleteCustomerById } from './CustomerApiCalls';
+import { fetchCustomerList, deleteCustomerById } from '../services/customerService';
 
-const CustomerList = () => {
+const CustomerListView = () => {
     const [customerList, setCustomerList] = useState([]);
     const navigate = useNavigate();
+
     useEffect(
         () => {
             const callFetchCustomerData = async () => {
@@ -17,8 +18,12 @@ const CustomerList = () => {
             callFetchCustomerData();
         }, []
     );
-    const handleDelete = (id) => {
-        deleteCustomerById(id);
+
+    const handleDelete = async (id) => {
+        const res = await deleteCustomerById(id);
+        if (res) {
+            setCustomerList(customerList.filter(customer => customer.id !== id));
+        }
     }
 
     const columns = [
@@ -47,8 +52,8 @@ const CustomerList = () => {
             key: 'actions',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button icon={<EyeOutlined />} onClick={() => navigate(`/Customer/view/${record.id}`)}>View</Button>
-                    <Button icon={<EditOutlined />} onClick={() => navigate(`/Customer/edit/${record.id}`)}>Edit</Button>
+                    <Button icon={<EyeOutlined />} onClick={() => navigate(`/customers/view/${record.id}`)}>View</Button>
+                    <Button icon={<EditOutlined />} onClick={() => navigate(`/customers/edit/${record.id}`)}>Edit</Button>
                     <Popconfirm title="Are you sure?" onConfirm={() => handleDelete(record.id)}>
                         <Button icon={<DeleteOutlined />} danger>Delete</Button>
                     </Popconfirm>
@@ -59,11 +64,11 @@ const CustomerList = () => {
 
     return (
         <div>
-            <Button icon={<PlusOutlined />} onClick={() => navigate(`/Customer/add`)}>Create New Customer</Button>
+            <Button icon={<PlusOutlined />} onClick={() => navigate(`/customers/add`)}>Create New Customer</Button>
             <Divider/>
             <Table dataSource={customerList} columns={columns} rowKey="id" ></Table>
         </div>
     );
 }
 
-export default CustomerList;
+export default CustomerListView;

@@ -20,7 +20,6 @@ export const fetchProjectList = async () => {
     } catch (error) {
         console.log("Error occurred: ", error);
     }
-
 }
 export const callCreateProject = async (id, values) => {
     const method = id ? "PUT" : "POST";
@@ -41,20 +40,39 @@ export const callCreateProject = async (id, values) => {
     }
 }
 
-export const deleteProjectById = async () => {
-
+export const deleteProjectById = async (id) => {
     try {
-        const response = await fetch(ENDPOINT, {
+        const response = await fetch(`${ENDPOINT}/${id}`, {
             method: "DELETE",
         });
-        const data = await response.json();
-        return data;
+        if (response.status === 500) {
+            console.log("Error occurred: ");
+            message.error("Error occurred.!");
+            return false;
+        }
+        message.success("Record deleted successfully.!");
+        return true;
+
     } catch (error) {
         console.log("Error occurred: ", error);
-
+        message.error("Error occurred.!");
     }
 }
+export const deleteCustomerById = async (id) => {
 
+    try {
+        await fetch(`${ENDPOINT}/${id}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        message.success("Record deleted successfully.!");
+    } catch (error) {
+        console.log("Error occurred: ", error);
+        message.error("Error occurred.!");
+    }
+}
 export const downloadProjectByDataRange = async (startDate, endDate) => {
     try {
         const response = await fetch(`${ENDPOINT}/download`, {
@@ -68,22 +86,23 @@ export const downloadProjectByDataRange = async (startDate, endDate) => {
                 endDate: endDate
             })
         });
+        console.log("response:",response);
         if (!response.ok) {
             console.log("Error occurred");
             message.error('Error occurred');
 
         } else {
-            const blob = await response.blob(); // Convert the response to a Blob
+            const blob = await response.blob(); 
             const url = window.URL.createObjectURL(new Blob([blob]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'projects.zip'); // Set the file name
+            link.setAttribute('download', 'projects.zip'); 
             document.body.appendChild(link);
             link.click();
-            link.parentNode.removeChild(link); // Clean up the link element
+            link.parentNode.removeChild(link); 
             message.success('Download started');
         }
-        
+
     } catch (error) {
         console.log("Error occurred: ", error);
 

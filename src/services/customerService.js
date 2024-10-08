@@ -1,3 +1,5 @@
+import { message } from "antd";
+
 const ENDPOINT = 'http://localhost:8080/api/v1/customers';
 
 export const fectchCustomerDataById = async (id) => {
@@ -40,16 +42,24 @@ export const callCreateCustomer = async (id, values) => {
     }
 }
 
-export const deleteCustomerById = async () => {
+export const deleteCustomerById = async (id) => {
 
     try {
-        const response = await fetch(ENDPOINT, {
+        const response = await fetch(`${ENDPOINT}/${id}`, {
             method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
-        const data = await response.json();
-        return data;
+        if (response.status === 500) {
+            console.log("Error occurred: ");
+            message.error("Error occurred.!");
+            return false;
+        }
+        message.success("Record deleted successfully.!");
+        return true;
     } catch (error) {
         console.log("Error occurred: ", error);
-
+        message.error("Error occurred.!");
     }
 }
