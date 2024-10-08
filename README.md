@@ -54,8 +54,7 @@ To build and run your application with Docker:
   - **Update**: Edit details of an existing customer or project.
   - **Delete**: Remove a customer or project.
 
-### Database and API Configuration
+## Database and API Configuration
 
-This application uses **PostgreSQL** for data persistence. A Docker container for PostgreSQL is created automatically when you run the application with `docker compose`.
-
-- The backend services will expose API endpoints at `http://localhost:8080` for interacting with **Customers** and **Projects**.
+Backend to this application is available at:
+[https://github.com/Shalika-Madhushanki/customer-project-backend](https://github.com/Shalika-Madhushanki/customer-project-backend)
